@@ -10,6 +10,7 @@ namespace ToDoList.Models
     private string _description;
     private int _id;
     private DateTime _dueDate;
+    private int _categoryId;
 
     public Item (string description, int id = 0)
     {
@@ -17,11 +18,12 @@ namespace ToDoList.Models
       _id = id;
     }
 
-    public Item (string description, DateTime dueDate, int id = 0)
+    public Item (string description, DateTime dueDate, int categoryId, int id = 0)
     {
       _description = description;
       _id = id;
       _dueDate = dueDate;
+      _categoryId = categoryId;
     }
 
     public string GetDescription()
@@ -36,8 +38,6 @@ namespace ToDoList.Models
 
     public int GetId()
     {
-      // Temporarily returning dummy id to get beyond compiler errors, until we refactor to work with database.
-      // return 0;
       return _id;
     }
 
@@ -92,7 +92,6 @@ namespace ToDoList.Models
 
     public static List<Item> GetAll()
     {
-      // Item dummyItem = new Item("dummy item");//This line added to workaround compiler errors
       List<Item> allItems = new List<Item> {};
       MySqlConnection conn = DB.Connection();
       conn.Open();
@@ -104,7 +103,8 @@ namespace ToDoList.Models
         int itemId = rdr.GetInt32(0);
         string itemDescription = rdr.GetString(1);
         DateTime itemDueDate = rdr.GetDateTime(2);
-        Item newItem = new Item(itemDescription, itemDueDate, itemId);
+        int categoryId = rdr.GetInt32(3);
+        Item newItem = new Item(itemDescription, itemDueDate, itemId, categoryId);
         allItems.Add(newItem);
       }
       conn.Close();
@@ -114,7 +114,7 @@ namespace ToDoList.Models
       }
       return allItems;
     }
-    //
+
     public static void ClearAll()
     {
       MySqlConnection conn = DB.Connection();

@@ -21,7 +21,7 @@
     {
       @foreach (var category in Model)
       {
-        <a href="/categories/@category.GetId()" class="btn btn-dark">@category.GetName()</a><br>
+        <a href="/categories/@category.{categoryId}" class="btn btn-dark">@category.GetName()</a><br>
       }
     }
     </ul>
